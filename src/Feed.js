@@ -19,6 +19,8 @@ function Feed() {
     const [input, setInput] = useState("");
     const [posts, setPosts] = useState([]);
 
+    const id = db.collection("posts").doc().id;
+
     useEffect(() => {
         db.collection("posts").orderBy('timestamp', 'desc').onSnapshot(snapshot => {
             setPosts(snapshot.docs.map(doc => (
@@ -36,17 +38,31 @@ function Feed() {
     const sendPost = (event) => {
         event.preventDefault();
         db.collection("posts").add({
+            post_id: id,
             name: user.displayName,
             description: "Testing firebase",
             message: input,
             photoUrl: user.photoUrl || " ",
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+
 
         })
 
 
         setInput("");
     }
+
+    const deletePost = (id) => {
+        const docid = db.collection("posts").where('post_id', "==", id);
+        docid.get().then(function (querySnapshot) {
+            querySnapshot.forEach((doc) => {
+                doc.ref.delete();
+            })
+        })
+        alert("document deleted!");
+    }
+
+
 
     return (
         <div className='feed'>
@@ -69,13 +85,15 @@ function Feed() {
 
             {/* posts */}
             <FlipMove>
-                {posts.map(({ id, data: { name, description, message, photoUrl } }) => (
+                {posts.map(({ id, data: { name, description, message, photoUrl, post_id } }) => (
                     <Post
                         key={id}
+                        pid={post_id}
                         name={name}
                         description={description}
                         message={message}
                         photoUrl={photoUrl}
+                        onDelete={deletePost}
                     />
                 ))}
             </FlipMove>

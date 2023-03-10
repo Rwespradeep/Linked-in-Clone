@@ -1,11 +1,31 @@
 import React from 'react';
 import './InputOption.css';
 
-function InputOption({ Icon, title, color }) {
+function InputOption({ Icon, title, color, onDeleteClick }) {
     return (
-        <div className='inputOptions'>
-            <Icon style={{ color: color }} />
-            <h4>{title}</h4>
+        //{
+        // title: "Delete" ? < div className='inputOptions' >
+        //     <Icon onClick={onDeleteClick} style={{ color: color }} />
+        //     <h4>{title}</h4>
+        // </div > : < div className='inputOptions' >
+        //     <Icon style={{ color: color }} />
+        //     <h4>{title}</h4>
+        // </div >
+        //}
+        // < div className='inputOptions' >
+        //     <Icon style={{ color: color }} />
+        //     <h4>{title}</h4>
+        // </div >
+        <div>
+            {{ title } = "Delete" ? <div className="inputOptions">
+                <Icon onClick={onDeleteClick} style={{ color: color }} />
+                <h4>{title}</h4>
+            </div>
+                :
+                <div className="inputOptions">
+                    <Icon style={{ color: color }} />
+                    <h4>{title}</h4>
+                </div>}
         </div>
     )
 }
